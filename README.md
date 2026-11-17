@@ -1,4 +1,6 @@
-# Nu primesc notă pentru că nu am pus titlu și descriere
+# Virtuoso
+
+**Virtuoso**, joc muzical interactiv de ritm și simulator de instrumente (pian, chitară, flaut) dezvoltat în C++ (POO). Permite interpretarea melodiilor predefinite direct de la tastatură cu sistem de scor, combo și detecție a preciziei temporale, precum și compunerea propriilor cântece.
 
 ### Folosiți template-ul corespunzător grupei voastre!
 
