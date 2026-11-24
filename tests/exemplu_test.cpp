@@ -57,7 +57,7 @@ int main() {
     assert(gasita.getEticheta() == "Mi");
     assert(!pian.cautaNotaDupaTasta('z', gasita));
 
-    Virtuoso joc("Tester");
+    Virtuoso joc(0);
     joc.alegeInstrument(0);
     joc.creeazaCantec("Custom_Test", "q-w--e", 1000);
     assert(joc.getNumarCantece() == 1);
