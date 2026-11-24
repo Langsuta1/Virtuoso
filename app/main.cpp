@@ -16,7 +16,7 @@ int main() {
         notaAtribuita = notaCopiata;
     }
 
-    Virtuoso joc;
+    Virtuoso joc(0);
     if (!joc.incarcaCanteceDinFisier("assets/cantece.txt")) {
         joc.creeazaCantec("Melodie_Demo", "q-w-e-r-t-y", 1000);
     }
@@ -49,8 +49,7 @@ int main() {
 
         if (optiune == 1) {
             std::size_t nrInst = 0;
-            std::cout << "\nAlege instrumentul:\n  [1] Pian\n  [2] Chitara\nOptiune (1 sau 2): "
-                      << std::flush;
+            std::cout << "\nAlege instrumentul:\n  [1] Pian\n  [2] Chitara\nOptiune (1 sau 2): " << std::flush;
             if (std::cin >> nrInst) {
                 if (nrInst >= 1) {
                     joc.alegeInstrument(nrInst - 1);
@@ -61,14 +60,11 @@ int main() {
         } else if (optiune == 2) {
             joc.afiseazaListaCantece();
             std::size_t nrCantec = 0;
-            std::cout << "Alege numarul cantecului pe care vrei sa il canti (1.."
-                      << joc.getNumarCantece() << "): " << std::flush;
+            std::cout << "Alege numarul cantecului pe care vrei sa il canti (1.." << joc.getNumarCantece() << "): " << std::flush;
             if (std::cin >> nrCantec) {
                 if (nrCantec >= 1) {
                     joc.joacaCantecInteractiv(nrCantec - 1, std::cin);
-                    std::cout << "Rezumat runda -> Scor: " << joc.getScor()
-                              << " | Combo: " << joc.getCombo()
-                              << " | Greseli: " << joc.getNrGreseli() << "\n";
+                    std::cout << "Rezumat runda -> Scor: " << joc.getScor() << " | Combo: " << joc.getCombo() << " | Greseli: " << joc.getNrGreseli() << "\n";
                 } else {
                     std::cout << "[!] Numar de cantec invalid!\n";
                 }
@@ -76,8 +72,7 @@ int main() {
         } else if (optiune == 3) {
             joc.afiseazaListaCantece();
             std::size_t nrCantec = 0;
-            std::cout << "Alege numarul cantecului pentru Preview (1.."
-                      << joc.getNumarCantece() << "): " << std::flush;
+            std::cout << "Alege numarul cantecului pentru Preview (1.." << joc.getNumarCantece() << "): " << std::flush;
             if (std::cin >> nrCantec) {
                 if (nrCantec >= 1) {
                     joc.redaPreviewCantec(nrCantec - 1);
@@ -88,25 +83,22 @@ int main() {
         } else if (optiune == 4) {
             std::string titluNou;
             std::string partituraNoua;
-            std::cout << "\nIntrodu titlul cantecului (fara spatii, ex: Melodia_Mea): "
-                      << std::flush;
+            std::cout << "\nIntrodu titlul cantecului (fara spatii, ex: Melodia_Mea): " << std::flush;
             std::cin >> titluNou;
-            std::cout << "Introdu partitura folosind q,w,e,r,t,y si '-' pentru 1s liber\n"
-                      << "(exemplu: q--w--w--qq-q-we-e): " << std::flush;
+            std::cout << "Introdu partitura folosind q,w,e,r,t,y si '-' pentru 1s liber (ex: q--w--w--qq-q-we-e): " << std::flush;
             std::cin >> partituraNoua;
             joc.creeazaCantec(titluNou, partituraNoua, 1000);
         } else if (optiune == 5) {
             joc.afiseazaListaCantece();
             std::size_t nrCantec = 0;
             int nivelViteza = 3;
-            std::cout << "Alege numarul cantecului (1.." << joc.getNumarCantece()
-                      << "): " << std::flush;
+            std::cout << "Alege numarul cantecului (1.." << joc.getNumarCantece() << "): " << std::flush;
             std::cin >> nrCantec;
-            std::cout << "\nAlege nivelul de viteza:\n"
-                      << "  [1] Greu  - Raport 1:1   cu cel real ('-' = 0.4s, identic cu Preview-ul!)\n"
-                      << "  [2] Mediu - Raport 1:1.5 fata de real ('-' = 0.6s, putin mai incet)\n"
-                      << "  [3] Usor  - Raport 1:2.5 fata de real ('-' = 1.0s, ritm de incepatori)\n"
-                      << "Optiunea ta (1-3): " << std::flush;
+            std::cout << "\nAlege nivelul de viteza:\n";
+            std::cout << "  [1] Greu  - Raport 1:1   cu cel real ('-' = 0.4s, identic cu Preview-ul!)\n";
+            std::cout << "  [2] Mediu - Raport 1:1.5 fata de real ('-' = 0.6s, putin mai incet)\n";
+            std::cout << "  [3] Usor  - Raport 1:2.5 fata de real ('-' = 1.0s, ritm de incepatori)\n";
+            std::cout << "Optiunea ta (1-3): " << std::flush;
             if (std::cin >> nivelViteza) {
                 if (nrCantec >= 1) {
                     joc.ajusteazaRitmCantec(nrCantec - 1, nivelViteza);

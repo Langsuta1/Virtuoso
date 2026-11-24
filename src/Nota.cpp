@@ -6,22 +6,13 @@ void Nota::valideazaTimp() {
     }
 }
 
-Nota::Nota(char tasta,
-           const std::string& eticheta,
-           const std::string& fisierSunet,
-           int timpAsteptareMs)
-    : tasta_(tasta),
-      eticheta_(eticheta),
-      fisierSunet_(fisierSunet),
-      timpAsteptareMs_(timpAsteptareMs) {
+Nota::Nota(char tasta, const std::string& eticheta, const std::string& fisierSunet, int timpAsteptareMs)
+    : tasta_(tasta), eticheta_(eticheta), fisierSunet_(fisierSunet), timpAsteptareMs_(timpAsteptareMs) {
     valideazaTimp();
 }
 
 Nota::Nota(const Nota& other)
-    : tasta_(other.tasta_),
-      eticheta_(other.eticheta_),
-      fisierSunet_(other.fisierSunet_),
-      timpAsteptareMs_(other.timpAsteptareMs_) {}
+    : tasta_(other.tasta_), eticheta_(other.eticheta_), fisierSunet_(other.fisierSunet_), timpAsteptareMs_(other.timpAsteptareMs_) {}
 
 Nota& Nota::operator=(const Nota& other) {
     if (this != &other) { // Protectie la auto-atribuire (n1 = n1)

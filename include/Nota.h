@@ -15,10 +15,7 @@ private:
 
 public:
     // explicit previne conversiile implicite (ex: un char transformat automat in Nota)
-    explicit Nota(char tasta = 'q',
-                  const std::string& eticheta = "Do",
-                  const std::string& fisierSunet = "do.wav",
-                  int timpAsteptareMs = 500);
+    explicit Nota(char tasta = 'q', const std::string& eticheta = "Do", const std::string& fisierSunet = "do.wav", int timpAsteptareMs = 500);
 
     // Regula celor 3
     Nota(const Nota& other);

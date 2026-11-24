@@ -1,15 +1,16 @@
 #include "Instrument.h"
 
-// Audio nativ Windows - dezactivat pe Linux/macOS si pe GitHub Actions
+// Extra Audio: Includem biblioteca audio din Windows DOAR cand rulam pe un PC Windows,
+// nu si pe serverele Linux/macOS de pe GitHub Actions.
 #if defined(_WIN32) && !defined(GITHUB_ACTIONS)
 #include <windows.h>
 #include <mmsystem.h>
 #endif
 
 namespace {
+// Functie ajutatoare care reda un fisier .wav in fundal (SND_ASYNC) fara sa blocheze consola.
 void redaFisierWav(const std::string& caleFisier) {
 #if defined(_WIN32) && !defined(GITHUB_ACTIONS)
-    // SND_ASYNC reda sunetul pe fundal ca sa nu blocheze consola
     PlaySoundA(caleFisier.c_str(), nullptr, SND_FILENAME | SND_ASYNC | SND_NODEFAULT);
 #else
     (void) caleFisier;
@@ -17,6 +18,8 @@ void redaFisierWav(const std::string& caleFisier) {
 }
 } // namespace
 
+// Functie privata: la Pian evidentiaza clapa apasata [### Mi ###],
+// iar la Chitara deseneaza coarda care vibreaza o====~-~-~-~====o.
 void Instrument::afiseazaGraficaInstrument(const Nota& n) const {
     if (nume_ == "Pian") {
         std::cout << "   [ECRAN PIAN]    -> ";
@@ -29,11 +32,12 @@ void Instrument::afiseazaGraficaInstrument(const Nota& n) const {
         }
         std::cout << "\n";
     } else {
-        std::cout << "   [ECRAN CHITARA] -> Coarda (" << n.getEticheta()
-                  << "): o====~-~-~-~====o\n";
+        std::cout << "   [ECRAN CHITARA] -> Coarda (" << n.getEticheta() << "): o====~-~-~-~====o\n";
     }
 }
 
+// Constructorul populeaza vectorul tasteMapate_ cu cele 6 note pe tastele q, w, e, r, t, y.
+// Extra STL: 'emplace_back' construieste obiectul Nota direct in interiorul vectorului, fara copiere suplimentara.
 Instrument::Instrument(const std::string& nume, const std::string& folderSunete)
     : nume_(nume), folderSunete_(folderSunete) {
     tasteMapate_.emplace_back('q', "Do",  "do.wav",  500);
@@ -44,6 +48,7 @@ Instrument::Instrument(const std::string& nume, const std::string& folderSunete)
     tasteMapate_.emplace_back('y', "La",  "la.wav",  500);
 }
 
+// Parcurge tastele instrumentului si verifica daca litera apasata se potriveste cu vreo nota.
 bool Instrument::cautaNotaDupaTasta(char tasta, Nota& rezultat) const {
     for (const auto& n : tasteMapate_) {
         if (n.potrivesteTasta(tasta)) {
@@ -54,6 +59,8 @@ bool Instrument::cautaNotaDupaTasta(char tasta, Nota& rezultat) const {
     return false;
 }
 
+// Daca jucatorul a gresit, reda sunetul fals (gresit.wav).
+// Daca a apasat corect, afiseaza grafica instrumentului si reda nota .wav corespunzatoare.
 void Instrument::redaOutput(const Nota& n, bool gresit) const {
     if (gresit) {
         const std::string caleEroare = folderSunete_ + "gresit.wav";
@@ -69,6 +76,7 @@ void Instrument::redaOutput(const Nota& n, bool gresit) const {
     redaFisierWav(caleNota);
 }
 
+// Afiseaza pe o linie toate tastele QWERTY ale instrumentului.
 void Instrument::afiseazaControale() const {
     std::cout << "Taste " << nume_ << " (QWERTY): ";
     for (const auto& n : tasteMapate_) {
@@ -81,6 +89,7 @@ const std::string& Instrument::getNume() const {
     return nume_;
 }
 
+// Afiseaza numele instrumentului si toate notele lui folosind operator<< din Nota.
 std::ostream& operator<<(std::ostream& os, const Instrument& inst) {
     os << inst.nume_ << " -> Taste: ";
     for (const auto& n : inst.tasteMapate_) {

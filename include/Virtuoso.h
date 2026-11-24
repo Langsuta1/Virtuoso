@@ -10,7 +10,6 @@
 
 class Virtuoso {
 private:
-    std::string numeJucator_;
     std::vector<Instrument> instrumente_;
     std::vector<Cantec> cantece_;
     std::size_t instrumentSelectat_;
@@ -19,14 +18,10 @@ private:
     int nrGreseli_;
 
     int calculeazaPuncteNota(int diferentaTimpMs) const;
-
-    void proceseazaApasareNota(const Nota& notaCeruta,
-                               char tastaJucator,
-                               int diferentaTimpMs,
-                               int distantaAfisataMs);
+    void proceseazaApasareNota(const Nota& notaCeruta, char tastaJucator, int diferentaTimpMs, int distantaAfisataMs);
 
 public:
-    explicit Virtuoso(const std::string& numeJucator = "Jucator");
+    explicit Virtuoso(std::size_t instrumentInitial = 0);
 
     bool incarcaCanteceDinFisier(const std::string& caleFisier);
     void alegeInstrument(std::size_t index);
@@ -39,13 +34,9 @@ public:
     int joacaCantecInteractiv(std::size_t indexCantec, std::istream& in = std::cin);
 
     // Varianta fara std::cin, folosita de testele automate (CTest)
-    int joacaCantec(std::size_t indexCantec,
-                    const std::vector<char>& tasteApasate,
-                    const std::vector<int>& timpiMs);
+    int joacaCantec(std::size_t indexCantec, const std::vector<char>& tasteApasate, const std::vector<int>& timpiMs);
 
-    void creeazaCantec(const std::string& titluNou,
-                       const std::string& secventaTaste,
-                       int ritmMs = 1000);
+    void creeazaCantec(const std::string& titluNou, const std::string& secventaTaste, int ritmMs = 1000);
 
     std::size_t getNumarCantece() const;
     int getScor() const;

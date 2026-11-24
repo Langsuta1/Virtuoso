@@ -21,16 +21,12 @@ public:
     // Durata unui '-' la viteza reala 1:1 (folosita in Preview si la raportul de viteza)
     static constexpr int kPauzaRealaMs = 400;
 
-    explicit Cantec(const std::string& titlu = "Melodie Noua",
-                    const std::string& dificultate = "Mediu",
-                    int pauzaStandardMs = 1000);
+    explicit Cantec(const std::string& titlu = "Melodie Noua", const std::string& dificultate = "Mediu", int pauzaStandardMs = 1000);
 
     void adaugaNota(const Nota& n);
 
     // Transforma o partitura text (ex: "q--w-qq-e") in obiecte Nota cu timpii calculati din '-'
-    void construiesteDinPartitura(const std::string& partituraText,
-                                  const Instrument& inst,
-                                  bool afiseazaCreare = false);
+    void construiesteDinPartitura(const std::string& partituraText, const Instrument& inst, bool afiseazaCreare = false);
 
     int calculeazaDurataTotalaMs() const;
     void schimbaRitm(double factorTimp);
