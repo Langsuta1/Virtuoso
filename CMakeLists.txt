@@ -69,8 +69,10 @@ add_executable(${MAIN_EXECUTABLE_NAME}
 )
 target_sources(${MAIN_LIBRARY_NAME}
     PRIVATE
-        src/Example.cpp
-        src/internal/Detail.cpp
+        src/Nota.cpp
+        src/Cantec.cpp
+        src/Instrument.cpp
+        src/Virtuoso.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
@@ -106,6 +108,9 @@ target_include_directories(${MAIN_LIBRARY_NAME} SYSTEM PRIVATE
 # Link libraries
 
 target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE ${MAIN_LIBRARY_NAME})
+if(WIN32)
+    target_link_libraries(${MAIN_LIBRARY_NAME} PUBLIC winmm)
+endif()
 
 # target_link_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${<SomeLib>_BINARY_DIR}/lib)
 # target_link_libraries(${MAIN_EXECUTABLE_NAME} <SomeLib>)

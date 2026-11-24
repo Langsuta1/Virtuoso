@@ -1,54 +1,128 @@
+#include <cstddef>
 #include <iostream>
-#include <array>
-#include "Example.h"
+#include <string>
+
+#include "Cantec.h"
+#include "Instrument.h"
+#include "Nota.h"
+#include "Virtuoso.h"
 
 int main() {
-    std::cout << "Hello, world!\n";
-    Example e1;
-    e1.add(3);
-    e1.g();
-    std::array<int, 100> v{};
-    int nr;
-    std::cout << "Introduceți nr: ";
-    /////////////////////////////////////////////////////////////////////////
-    /// Observație: dacă aveți nevoie să citiți date de intrare de la tastatură,
-    /// dați exemple de date de intrare folosind fișierul tastatura.txt
-    /// Trebuie să aveți în fișierul tastatura.txt suficiente date de intrare
-    /// (în formatul impus de voi) astfel încât execuția programului să se încheie.
-    /// De asemenea, trebuie să adăugați în acest fișier date de intrare
-    /// pentru cât mai multe ramuri de execuție.
-    /// Dorim să facem acest lucru pentru a automatiza testarea codului, fără să
-    /// mai pierdem timp de fiecare dată să introducem de la zero aceleași date de intrare.
-    ///
-    /// Pe GitHub Actions (bife), fișierul tastatura.txt este folosit
-    /// pentru a simula date introduse de la tastatură.
-    /// Bifele verifică dacă programul are erori de compilare, erori de memorie și memory leaks.
-    ///
-    /// Dacă nu puneți în tastatura.txt suficiente date de intrare, îmi rezerv dreptul să vă
-    /// testez codul cu ce date de intrare am chef și să nu pun notă dacă găsesc vreun bug.
-    /// Impun această cerință ca să învățați să faceți un demo și să arătați părțile din
-    /// program care merg (și să le evitați pe cele care nu merg).
-    ///
-    /////////////////////////////////////////////////////////////////////////
-    std::cin >> nr;
-    /////////////////////////////////////////////////////////////////////////
-    for(int i = 0; i < nr; ++i) {
-        std::cout << "v[" << i << "] = ";
-        std::cin >> v[i];
+    // Testam Regula celor 3 pe clasa Nota (constructor de copiere, operator=, destructor)
+    const Nota notaOriginala('q', "Do", "do.wav", 1000);
+    const Nota notaCopiata(notaOriginala);
+    Nota notaAtribuita('t', "Sol", "sol.wav", 500);
+    if (notaAtribuita.getTasta() != notaCopiata.getTasta()) {
+        notaAtribuita = notaCopiata;
     }
-    std::cout << "\n\n";
-    std::cout << "Am citit de la tastatură " << nr << " elemente:\n";
-    for(int i = 0; i < nr; ++i) {
-        std::cout << "- " << v[i] << "\n";
+
+    Virtuoso joc;
+    if (!joc.incarcaCanteceDinFisier("assets/cantece.txt")) {
+        joc.creeazaCantec("Melodie_Demo", "q-w-e-r-t-y", 1000);
     }
-    ///////////////////////////////////////////////////////////////////////////
-    /// Pentru date citite din fișier, NU folosiți tastatura.txt. Creați-vă voi
-    /// alt fișier propriu cu ce alt nume doriți.
-    /// Exemplu:
-    /// std::ifstream fis("date.txt");
-    /// for(int i = 0; i < nr2; ++i)
-    ///     fis >> v2[i];
-    ///
-    ///////////////////////////////////////////////////////////////////////////
+
+    std::cout << "==========================================================\n";
+    std::cout << "               BINE AI VENIT IN VIRTUOSO!                 \n";
+    std::cout << "  Taste (QWERTY): q=Do, w=Re, e=Mi, r=Fa, t=Sol, y=La     \n";
+    std::cout << "  Format Partitura: '-' = 1 secunda de liber intre note   \n";
+    std::cout << "                    Note lipite (ex: qq) = fara pauza     \n";
+    std::cout << "  Nota de baza:   " << notaAtribuita << "\n";
+    std::cout << "==========================================================\n";
+
+    bool rulare = true;
+    while (rulare) {
+        std::cout << "\n================ MENIU PRINCIPAL ===============\n";
+        std::cout << "  1. Schimba instrumentul (Pian / Chitara)\n";
+        std::cout << "  2. Canta un cantec (dupa partitura cu '-')\n";
+        std::cout << "  3. Asculta Preview cantec (in ritm real!)\n";
+        std::cout << "  4. Compune propriul cantec (ex: q--w--qq-e)\n";
+        std::cout << "  5. Modifica viteza (1:1 Greu / 1:1.5 Mediu / 1:2.5 Usor)\n";
+        std::cout << "  6. Ghid Taste & Lista Partituri\n";
+        std::cout << "  0. Iesire din joc\n";
+        std::cout << "================================================\n";
+        std::cout << "Optiunea ta (0-6): " << std::flush;
+
+        int optiune = 0;
+        if (!(std::cin >> optiune)) {
+            break;
+        }
+
+        if (optiune == 1) {
+            std::size_t nrInst = 0;
+            std::cout << "\nAlege instrumentul:\n  [1] Pian\n  [2] Chitara\nOptiune (1 sau 2): "
+                      << std::flush;
+            if (std::cin >> nrInst) {
+                if (nrInst >= 1) {
+                    joc.alegeInstrument(nrInst - 1);
+                } else {
+                    std::cout << "\n[!] Optiune invalida! Alege 1 (Pian) sau 2 (Chitara).\n";
+                }
+            }
+        } else if (optiune == 2) {
+            joc.afiseazaListaCantece();
+            std::size_t nrCantec = 0;
+            std::cout << "Alege numarul cantecului pe care vrei sa il canti (1.."
+                      << joc.getNumarCantece() << "): " << std::flush;
+            if (std::cin >> nrCantec) {
+                if (nrCantec >= 1) {
+                    joc.joacaCantecInteractiv(nrCantec - 1, std::cin);
+                    std::cout << "Rezumat runda -> Scor: " << joc.getScor()
+                              << " | Combo: " << joc.getCombo()
+                              << " | Greseli: " << joc.getNrGreseli() << "\n";
+                } else {
+                    std::cout << "[!] Numar de cantec invalid!\n";
+                }
+            }
+        } else if (optiune == 3) {
+            joc.afiseazaListaCantece();
+            std::size_t nrCantec = 0;
+            std::cout << "Alege numarul cantecului pentru Preview (1.."
+                      << joc.getNumarCantece() << "): " << std::flush;
+            if (std::cin >> nrCantec) {
+                if (nrCantec >= 1) {
+                    joc.redaPreviewCantec(nrCantec - 1);
+                } else {
+                    std::cout << "[!] Numar de cantec invalid!\n";
+                }
+            }
+        } else if (optiune == 4) {
+            std::string titluNou;
+            std::string partituraNoua;
+            std::cout << "\nIntrodu titlul cantecului (fara spatii, ex: Melodia_Mea): "
+                      << std::flush;
+            std::cin >> titluNou;
+            std::cout << "Introdu partitura folosind q,w,e,r,t,y si '-' pentru 1s liber\n"
+                      << "(exemplu: q--w--w--qq-q-we-e): " << std::flush;
+            std::cin >> partituraNoua;
+            joc.creeazaCantec(titluNou, partituraNoua, 1000);
+        } else if (optiune == 5) {
+            joc.afiseazaListaCantece();
+            std::size_t nrCantec = 0;
+            int nivelViteza = 3;
+            std::cout << "Alege numarul cantecului (1.." << joc.getNumarCantece()
+                      << "): " << std::flush;
+            std::cin >> nrCantec;
+            std::cout << "\nAlege nivelul de viteza:\n"
+                      << "  [1] Greu  - Raport 1:1   cu cel real ('-' = 0.4s, identic cu Preview-ul!)\n"
+                      << "  [2] Mediu - Raport 1:1.5 fata de real ('-' = 0.6s, putin mai incet)\n"
+                      << "  [3] Usor  - Raport 1:2.5 fata de real ('-' = 1.0s, ritm de incepatori)\n"
+                      << "Optiunea ta (1-3): " << std::flush;
+            if (std::cin >> nivelViteza) {
+                if (nrCantec >= 1) {
+                    joc.ajusteazaRitmCantec(nrCantec - 1, nivelViteza);
+                } else {
+                    std::cout << "[!] Numar de cantec invalid!\n";
+                }
+            }
+        } else if (optiune == 6) {
+            std::cout << joc;
+        } else if (optiune == 0) {
+            std::cout << "\nLa revedere! Multumim ca ai jucat Virtuoso!\n";
+            rulare = false;
+        } else {
+            std::cout << "\n[!] Optiune invalida! Alege o cifra intre 0 si 6.\n";
+        }
+    }
+
     return 0;
 }
