@@ -109,7 +109,7 @@ int main() {
         } else if (optiune == 6) {
             std::cout << joc;
         } else if (optiune == 0) {
-            std::cout << "\nLa revedere! Multumim ca ai jucat Virtuoso!\n";
+            std::cout << "\nLa revedere! Multumesc ca ai jucat Virtuoso!\n";
             rulare = false;
         } else {
             std::cout << "\n[!] Optiune invalida! Alege o cifra intre 0 si 6.\n";
